@@ -11,7 +11,7 @@
 //    contributors may be used to endorse or promote products derived
 //    from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 // PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
@@ -23,7 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// Copyright (c) 2008-2019 NVIDIA Corporation. All rights reserved.
+// Copyright (c) 2008-2021 NVIDIA Corporation. All rights reserved.
 #ifndef D3D11_RENDERER_RESOURCE_MANAGER_H
 #define D3D11_RENDERER_RESROUCE_MAANGER_H
 
@@ -70,7 +70,7 @@ public:
 	operator const void *() const { return mpProxy; }
 
 	template<typename value_type>
-	bool copy_to(value_type &value) const { 
+	bool copy_to(value_type &value) const {
 		const value_type *copyable = to_ptr<value_type>();
 		if(copyable) value = *copyable;
 		return copyable;
@@ -81,14 +81,14 @@ public:
 		return type_info() == typeid(value_type) ? &static_cast<ProxyImpl<value_type> *>(mpProxy)->mValue : 0;
 	}
 	template<typename value_type>
-	value_type *to_ptr() 
+	value_type *to_ptr()
 	{
 		return type_info() == typeid(value_type) ? &static_cast<ProxyImpl<value_type> *>(mpProxy)->mValue : 0;
 	}
-	
+
 #if !USE_ANY_AS_CONTAINER
-	bool operator==(const Any& other) const { 
-		return (mpProxy &&  other.mpProxy) ? (*mpProxy == *other.mpProxy) 
+	bool operator==(const Any& other) const {
+		return (mpProxy &&  other.mpProxy) ? (*mpProxy == *other.mpProxy)
 			:((!mpProxy && !other.mpProxy) ?  true : false); }
 #endif
 
@@ -129,7 +129,7 @@ private:
 	struct Releaser< std::map<T1,T2> > : public Visitor
 	{
 	public:
-		static void release(std::map<T1,T2>& t) 
+		static void release(std::map<T1,T2>& t)
 		{
 			for (typename std::map<T1,T2>::iterator it = t.begin(); it != t.end(); ++it)
 			{
@@ -141,7 +141,7 @@ private:
 	class Proxy
 	{
 	public:
-		virtual ~Proxy() { }
+		virtual ~Proxy()	{}
 		virtual const std::type_info& type_info() const = 0;
 		virtual Proxy *clone() const = 0;
 		virtual void release() = 0;
@@ -216,30 +216,30 @@ public:
 #else
 	typedef std::map<Any, Any, Any::Comp> CacheType;
 #endif
-	D3D11RendererResourceManager() 
-	{ 
+	D3D11RendererResourceManager()
+	{
 #if USE_ANY_AS_CONTAINER
-		mResources[D3DTraits<ID3D11VertexShader>::getType()] = 
+		mResources[D3DTraits<ID3D11VertexShader>::getType()] =
 			std::map< typename D3DTraits<ID3D11VertexShader>::key_type,     typename D3DTraits<ID3D11VertexShader>::value_type >();
-		mResources[D3DTraits<ID3D11PixelShader>::getType()] = 
+		mResources[D3DTraits<ID3D11PixelShader>::getType()] =
 			std::map< typename D3DTraits<ID3D11PixelShader>::key_type,      typename D3DTraits<ID3D11PixelShader>::value_type >();
-		mResources[D3DTraits<ID3D11GeometryShader>::getType()] = 
+		mResources[D3DTraits<ID3D11GeometryShader>::getType()] =
 			std::map< typename D3DTraits<ID3D11GeometryShader>::key_type,   typename D3DTraits<ID3D11GeometryShader>::value_type >();
-		mResources[D3DTraits<ID3D11HullShader>::getType()] = 
+		mResources[D3DTraits<ID3D11HullShader>::getType()] =
 			std::map< typename D3DTraits<ID3D11HullShader>::key_type,       typename D3DTraits<ID3D11HullShader>::value_type >();
-		mResources[D3DTraits<ID3D11DomainShader>::getType()] = 
+		mResources[D3DTraits<ID3D11DomainShader>::getType()] =
 			std::map< typename D3DTraits<ID3D11DomainShader>::key_type,     typename D3DTraits<ID3D11DomainShader>::value_type >();
-		mResources[D3DTraits<ID3D11InputLayout>::getType()] = 
+		mResources[D3DTraits<ID3D11InputLayout>::getType()] =
 			std::map< typename D3DTraits<ID3D11InputLayout>::key_type,      typename D3DTraits<ID3D11InputLayout>::value_type >();
-		mResources[D3DTraits<ID3D11RasterizerState>::getType()] = 
+		mResources[D3DTraits<ID3D11RasterizerState>::getType()] =
 			std::map< typename D3DTraits<ID3D11RasterizerState>::key_type,  typename D3DTraits<ID3D11RasterizerState>::value_type >();
-		mResources[D3DTraits<ID3D11DepthStencilState>::getType()] = 
+		mResources[D3DTraits<ID3D11DepthStencilState>::getType()] =
 			std::map< typename D3DTraits<ID3D11DepthStencilState>::key_type, typename D3DTraits<ID3D11DepthStencilState>::value_type >();
-		mResources[D3DTraits<ID3D11BlendState>::getType()] = 
+		mResources[D3DTraits<ID3D11BlendState>::getType()] =
 			std::map< typename D3DTraits<ID3D11BlendState>::key_type,        typename D3DTraits<ID3D11BlendState>::value_type >();
 #endif
 	}
-	~D3D11RendererResourceManager() 
+	~D3D11RendererResourceManager()
 	{
 #if USE_ANY_AS_CONTAINER
 		for (PxU32 i = 0; i < D3DTypes::NUM_TYPES; ++i)
@@ -249,8 +249,8 @@ public:
 #else
 		for (PxU32 i = 0; i < D3DTypes::NUM_TYPES; ++i)
 		{
-			for (CacheType::iterator it = mResources[i].begin(); 
-				it != mResources[i].end(); 
+			for (CacheType::iterator it = mResources[i].begin();
+				it != mResources[i].end();
 				++it)
 			{
 				it->second.release();
@@ -262,7 +262,7 @@ public:
 public:
 
 	template<typename d3d_type>
-	typename D3DTraits<d3d_type>::value_type 
+	typename D3DTraits<d3d_type>::value_type
 	hasResource(const typename D3DTraits<d3d_type>::key_type& key)
 	{
 		typedef typename D3DTraits<d3d_type>::key_type   key_type;
@@ -297,14 +297,14 @@ public:
 		typename cache_type::const_iterator it = resources.find(key);
 		return (it != resources.end()) ? it->second : NullTraits<value_type>::get();
 #else
-		Any::Temp<key_type> tempAny(key); 
+		Any::Temp<key_type> tempAny(key);
 		typename CacheType::iterator it = mResources[resourceID].find(tempAny());
 		return (it != mResources[resourceID].end()) ? any_cast<value_type>(it->second) : NullTraits<value_type>::get();
 #endif
 	}
 
 	template<typename d3d_type>
-	void registerResource(const typename D3DTraits<d3d_type>::key_type&   key, 
+	void registerResource(const typename D3DTraits<d3d_type>::key_type&   key,
 		                  const typename D3DTraits<d3d_type>::value_type& value)
 	{
 		typedef typename D3DTraits<d3d_type>::key_type   key_type;
