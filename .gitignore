@@ -1,0 +1,14 @@
+*.obj
+*.so
+*.dll
+*.bin
+*.exe
+*.lib
+*.a
+*.dylib
+*.pdb
+*.map
+*.exp
+compiler/
+cached/
+input/
